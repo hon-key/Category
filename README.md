@@ -82,3 +82,12 @@ if (items.count > 0) {
 @implementation VerifyNoSenderResult
 @end
 ```
+
+# Category
+
+### UIButton (CountDown)
+一个简洁的按钮倒计时，倒计时业务较多的情况下可以使用，避免代码冗余
+
+### UIButton (Observer)
+一个非常简洁易用的，基于 KVC 的数据监控按钮，按钮可以对一组数据的值进行监控，并自动判断是否应该让按钮不可点击
+对于这类业务非常频繁的项目，它会非常合适，极大避免代码冗余
