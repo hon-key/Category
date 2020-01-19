@@ -83,6 +83,42 @@ if (items.count > 0) {
 @end
 ```
 
+# MsgStation
+一个可以再某些应用场景取代 KVO 的工具
+
+按照某种业务场景，甚至是在写一些基础设施的时候，我们需要解耦某一些类。换句话说，我们在某种程度上不应该把某些类相关联在一起，因为这样会增加复杂度，降低可维护性，同时可能提高出现 bug 的可能性
+
+这个时候我们通常会用到 KVO 来解决这个问题，比如说当用户在一个页面的操作产生了一个结果，这个结果会影响到另外一个页面：
+
+我们可能会用 KVO 来发送通知让那个页面知道，但我们知道，KVO 只适用于两个页面同时被实例化的情况下，而且存在旧 ios 操作系统版本不 remove observer 就有可能崩溃的麻烦问题。
+
+或者我们可能会创建全局变量来获取，但是这样无形之中我们就多了一道管理全局变量的任务，要知道，共享全局变量是多线程问题的罪魁祸首。
+
+那何不针对这种问题统一搞一个可控的全局变量呢？MsgStation 就是为了这个而生的
+
+顾名思义，MsgStation 就是消息站，一个通过离线存储消息的公共区，是一个线程安全的公共区。
+
+按照上面我们举的栗子，当一个用户对一个页面操作产生的结果会影响另外一个页面时，我们可以这样写：
+
+```objc
+// 当一个用户对页面A的操作产生了一个结果，调用该代码，塞入一个站内消息：OperationA
+[MsgStation.station pushMessage:[[MsgStationMessage alloc] initWithName:@"OperationA" checkableCount:1 data:nil]];
+```
+
+```objc
+// 当用户进入页面B的时候，check 一下这个 OperationA，如果存在这个消息，就做一下操作
+MsgStationMessage *message = [[MsgStation station] checkMessageWithName:@"OperationA"];
+if (message) {
+    // do something...
+}
+```
+
+这样做的优点在于，首先两个页面解耦合，其次，页面B不需要事先存在并接受通知。
+
+不仅如此，checkableCount 传入 NSIntegerMax 可以让消息常驻，以此来设定一些已发生事件
+
+在一定程度上，MsgStation 可以替代 KVO 来执行更安全和更便捷的非耦合通讯
+
 # Category
 
 ### UIButton (CountDown)
