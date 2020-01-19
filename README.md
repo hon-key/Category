@@ -107,7 +107,7 @@ if (items.count > 0) {
 
 ```objc
 // 当用户进入页面B的时候，check 一下这个 OperationA，如果存在这个消息，就做一下操作
-MsgStationMessage *message = [[MsgStation station] checkMessageWithName:@"OperationA"];
+MsgStationMessage *message = [MsgStation.station checkMessageWithName:@"OperationA"];
 if (message) {
     // do something...
 }
