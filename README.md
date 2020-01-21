@@ -83,6 +83,20 @@ if (items.count > 0) {
 @end
 ```
 
+调用方式：
+
+```objc
+VerifyNoSender *sender = VerifyNoSender.new;
+sender.mobile = @"1234567890";
+[sender requestWithCompletion:^(VerifyNoSenderResult *result) {
+    if (result.hasError) {
+        // do something...
+        return;
+    }
+    [button countDownFrom:60];
+}];
+```
+
 # MsgStation
 一个可以在某些应用场景取代 KVO 的工具
 
